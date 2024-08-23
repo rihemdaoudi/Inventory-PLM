@@ -1,0 +1,155 @@
+﻿@model Inventory_PLM.Models.ViewModels.StoreDashboardViewModel
+
+@{
+    ViewData["Title"] = "DashboardStore";
+    Layout = "~/Views/Shared/_StoreLayout.cshtml";
+}
+
+<div class="container-fluid">
+    <!-- Page Heading -->
+    <h1 class="h3 mb-4 text-gray-800">Dashboard StoreManager</h1>
+
+    <div class="row">
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Total Products</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.TotalProducts</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+       @*  <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Total Purchase Orders</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.TotalPurchaseOrders</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-file-alt fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> *@
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-info shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Total Stock Value</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                
+                                <!-- Valeur formatée en dinar tunisien -->
+                               @Model.TotalStockValue.ToString("C", System.Globalization.CultureInfo.CreateSpecificCulture("fr-TN"))
+                               @*  $@Model.TotalStockValue *@
+                                </div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-coins fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Stock Overview</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Product Name</th>
+                            <th>Category</th>
+                            <th>Quantity</th>
+                            <th>Total Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.StockOverview)
+                        {
+                            <tr>
+                                <td>@item.ProductName</td>
+                                <td>@item.CategoryName</td>
+                                <td>@item.Quantity</td>
+                                <td>@item.TotalValue.ToString("C", System.Globalization.CultureInfo.CreateSpecificCulture("fr-TN"))</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-xl-6 col-lg-6">
+      <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Quantity by Category</h6>
+        </div>
+        <div class="card-body">
+            <div class="chart-pie pt-4">
+                    <canvas id="stockValueChart" style="width: 100%; height: 200px;"></canvas>
+            </div>
+        </div>
+      </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script src="~/assets/vendor/chart.js/Chart.min.js"></script>
+    <script src="~/assets/vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="~/assets/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+    <script src="~/assets/js/demo/datatables-demo.js"></script>
+    <script>
+        $(document).ready(function () {
+            var ctx = document.getElementById('stockValueChart').getContext('2d');
+            var stockValueChart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: @Html.Raw(Json.Serialize(Model.StockOverview.Select(o => o.CategoryName).Distinct())),
+                    datasets: [{
+                        label: 'Quantity by Category',
+                        data: @Html.Raw(Json.Serialize(Model.StockOverview.GroupBy(o => o.CategoryName).Select(g => g.Sum(o => o.Quantity)))),
+                        backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF'],
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    CSSMathInvert: false,
+                    plugins: {
+                        legend: {
+                            display:false,
+                            //position: 'top',
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function (context) {
+                                    let label = context.label || '';
+                                    let value = context.raw || '';
+                                    return `${label}: ${value.toLocaleString('fr-TN', { style: 'currency', currency: 'TND' })}`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+}
+

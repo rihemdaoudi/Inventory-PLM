@@ -1,0 +1,75 @@
+﻿@model Inventory_PLM.Models.SalesOrderItem
+
+@{
+    ViewData["Title"] = "Edit Sales Order Item";
+}
+
+<h1>Edit Sales Order Item</h1>
+
+<h4>Sales Order Item</h4>
+<hr />
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="SalesOrderID" class="control-label"></label>
+                <input asp-for="SalesOrderID" class="form-control" />
+                <span asp-validation-for="SalesOrderID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Code" class="control-label"></label>
+                <input asp-for="Code" class="form-control" />
+                <span asp-validation-for="Code" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Designation" class="control-label"></label>
+                <input asp-for="Designation" class="form-control" />
+                <span asp-validation-for="Designation" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UnitPriceExclTax" class="control-label"></label>
+                <input asp-for="UnitPriceExclTax" class="form-control" />
+                <span asp-validation-for="UnitPriceExclTax" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UnitPriceInclTax" class="control-label"></label>
+                <input asp-for="UnitPriceInclTax" class="form-control" />
+                <span asp-validation-for="UnitPriceInclTax" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="VAT" class="control-label"></label>
+                <input asp-for="VAT" class="form-control" />
+                <span asp-validation-for="VAT" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="RequestedQuantity" class="control-label"></label>
+                <input asp-for="RequestedQuantity" class="form-control" />
+                <span asp-validation-for="RequestedQuantity" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DeliveredQuantity" class="control-label"></label>
+                <input asp-for="DeliveredQuantity" class="form-control" />
+                <span asp-validation-for="DeliveredQuantity" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TotalAmount" class="control-label"></label>
+                <input asp-for="TotalAmount" class="form-control" />
+                <span asp-validation-for="TotalAmount" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

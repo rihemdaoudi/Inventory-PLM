@@ -1,0 +1,67 @@
+﻿@model IEnumerable<Inventory_PLM.Models.PurchaseOrder>
+
+@{
+    ViewData["Title"] = "Purchase Order Management";
+    Layout = "~/Views/Shared/_StoreLayout.cshtml";
+}
+
+
+<div class="container-fluid">
+    <h1 class="h3 mb-4 text-gray-800">Purchase Orders</h1>
+
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+                <!--Add Product Button -->
+                <button class="btn btn-primary btn-sm float-left" data-toggle="modal" data-target="#addPurchaseModal">
+                    <i class="fas fa-plus"></i> Add Purchase Order
+                </button>
+        </div>
+
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="PurhasedataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Code</th>
+                            <th>Designation</th>
+                            <th>Purchase Date</th>
+                            <th>Supplier</th>
+                            <th>Store Location</th>
+                            @* <th>Quantity In Stock</th> *@
+                            <th>Alert Quantity</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.Code</td>
+                                <td>@item.Designation</td>
+                                <td>@item.PurchaseDate.ToString("d")</td>
+                                <td>@item.Supplier.FirstName</td>
+                                <td>@item.StoreLocation</td>
+                               @*  <td>@item.QuantityInStock</td> *@
+                                <td>@item.AlertQuantity</td>
+                                <td>
+                                    <a href="@Url.Action("EditPurchaseOrder", "StoreManager", new { id = item.ID })" class="btn btn-sm btn-primary">Edit</a>
+                                    <a href="@Url.Action("DeletePurchaseOrder", "StoreManager", new { id = item.ID })" class="btn btn-sm btn-danger">Delete</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Include jQuery and DataTables JS -->
+<script src="~/assets/vendor/datatables/jquery.dataTables.min.js"></script>
+<script src="~/assets/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#PurchasedataTable').DataTable();
+    });
+</script>

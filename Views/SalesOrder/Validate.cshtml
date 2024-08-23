@@ -1,0 +1,63 @@
+﻿@model Inventory_PLM.Models.SalesOrder
+
+@{
+    ViewData["Title"] = "Validate Order";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<h3>Validate the following order:</h3>
+<div>
+    <h4>Sales Order</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            Code
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Code
+        </dd>
+        <dt class="col-sm-2">
+            Designation
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Designation
+        </dd>
+        <dt class="col-sm-2">
+            Sale Date
+        </dt>
+        <dd class="col-sm-10">
+            @Model.SaleDate.ToShortDateString()
+        </dd>
+        <dt class="col-sm-2">
+            Customer
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Customer.FirstName @Model.Customer.LastName
+        </dd>
+        <dt class="col-sm-2">
+            Store Location
+        </dt>
+        <dd class="col-sm-10">
+            @Model.StoreLocation
+        </dd>
+        <dt class="col-sm-2">
+            Total Amount
+        </dt>
+        <dd class="col-sm-10">
+            @Model.TotalAmount.ToString("C")
+        </dd>
+        <dt class="col-sm-2">
+            Status
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Status
+        </dd>
+    </dl>
+
+    <form asp-action="ValidateConfirmed" method="post">
+        <input type="hidden" asp-for="ID" />
+        <input type="submit" value="Validate" class="btn btn-success" />
+        <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>

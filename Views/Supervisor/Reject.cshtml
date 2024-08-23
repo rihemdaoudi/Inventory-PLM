@@ -1,0 +1,33 @@
+﻿@model Inventory_PLM.Models.SalesOrder
+
+@{
+    ViewData["Title"] = "Reject the order";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<div class="alert alert-danger" role="alert">
+    Are you sure you want to reject the <strong>@Model.Code</strong> ?
+</div>
+
+<form asp-action="Reject">
+    <input type="hidden" asp-for="ID" />
+    <div class="form-group">
+        <label asp-for="Customer.FirstName" class="control-label">Customer</label>
+        <input asp-for="Customer.FirstName" class="form-control" disabled />
+    </div>
+    <div class="form-group">
+        <label asp-for="SaleDate" class="control-label">Sale Date</label>
+        <input asp-for="SaleDate" class="form-control" disabled />
+    </div>
+    <div class="form-group">
+        <label asp-for="TotalAmount" class="control-label">Total Amount</label>
+        <input asp-for="TotalAmount" class="form-control" disabled />
+    </div>
+    <div class="form-group">
+        <label asp-for="Status" class="control-label">Statuts</label>
+        <input asp-for="Status" class="form-control" disabled />
+    </div>
+    <button type="submit" class="btn btn-danger">Save</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>

@@ -1,0 +1,79 @@
+﻿@model IEnumerable<Inventory_PLM.Models.PurchaseProposal>
+
+@{
+    ViewData["Title"] = "Purchase Proposals";
+    Layout = "~/Views/Shared/_PurchaseLayout.cshtml";
+
+}
+
+<h1>Purchase Proposals</h1>
+
+@* <table class="table">
+    <thead>
+        <tr>
+            <th>Description</th>
+            <th>Amount</th>
+            <th>Submitted Date</th>
+            <th>Submitted By</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var proposal in Model)
+        {
+            <tr>
+                <td>@proposal.Description</td>
+                <td>@proposal.Amount</td>
+                <td>@proposal.SubmittedDate</td>
+                <td>@proposal.SubmittedBy</td>
+                <td>@proposal.Status</td>
+                <td>
+                    <button class="btn btn-primary" data-toggle="modal" data-target="#reviewModal" data-id="@proposal.ProposalId">Review</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table> *@
+
+<!-- Review Modal -->
+<div class="modal fade" id="reviewModal" tabindex="-1" role="dialog" aria-labelledby="reviewModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="reviewModalLabel">Review Proposal</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="reviewForm" method="post" action="@Url.Action("ReviewProposal", "PurchasingManager")">
+                    <input type="hidden" name="ProposalId" id="ProposalId" />
+                    <div class="form-group">
+                        <label for="comments">Comments</label>
+                        <textarea class="form-control" id="comments" name="Comments"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="status">Status</label>
+                        <select class="form-control" id="status" name="Status">
+                            <option value="Approved">Approved</option>
+                            <option value="Rejected">Rejected</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $('#reviewModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            var proposalId = button.data('id');
+            var modal = $(this);
+            modal.find('.modal-body #ProposalId').val(proposalId);
+        });
+    </script>
+}

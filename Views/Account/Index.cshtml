@@ -1,0 +1,68 @@
+﻿@model Inventory_PLM.Models.Login
+
+@{
+    Layout = "_Layout";
+}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-xl-10 col-lg-12 col-md-9">
+            <div class="card o-hidden border-0 shadow-lg my-5">
+                <div class="card-body p-0">
+                    <div class="row">
+
+                        <div class="col-lg-6 d-none d-lg-block bg-login-image" style="background-image: url('@Url.Content("~/Assets/img/inventory-management-software-coimbatore.png")'); background-size: cover;"></div>
+
+                        <div class="col-lg-6">
+                            <div class="p-5">
+                                <div class="text-center">
+                                    <h1 class="h4 text-gray-900 mb-4">Sign in</h1>
+                                    <h6>to start your session</h6>
+                                    
+                                </div>
+                                
+                                <form asp-action="Index" method="post" class="user">
+                                    <div class="form-group">
+                                        <input asp-for="Email" class="form-control form-control-user" id="InputEmail" aria-describedby="emailHelp" placeholder="Enter Email Address">
+                                        <span asp-validation-for="Email" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <input asp-for="Password" class="form-control form-control-user" id="InputPassword" placeholder="Password" type="password">
+                                        <span asp-validation-for="Password" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="custom-control custom-checkbox small">
+                                            <input asp-for="Remember" class="custom-control-input" id="CustomCheck" type="checkbox">
+                                            <label class="custom-control-label" for="CustomCheck">Remember Me</label>
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary btn-user btn-block">
+                                        Login
+                                    </button>
+                                    <hr>
+                                    <a href="~/Account/ExternalLogin?provider=Google" class="btn btn-google btn-user btn-block">
+                                        <i class="fab fa-google fa-fw"></i> Login with Google
+                                    </a>
+
+                                </form>
+                                <hr>
+                                <div class="text-center">
+                                    <a class="small" asp-action="ForgotPassword">Forgot Password?</a>
+                                </div>
+                               
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+
+
+

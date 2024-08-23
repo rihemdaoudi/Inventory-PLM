@@ -1,0 +1,64 @@
+﻿@model Inventory_PLM.Models.PurchaseInvoice
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_PurchaseLayout.cshtml";
+}
+
+<h1>Create</h1>
+
+<h4>PurchaseInvoice</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div class="form-group">
+                <label asp-for="Code" class="control-label"></label>
+                <input asp-for="Code" class="form-control" />
+                <span asp-validation-for="Code" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Date" class="control-label"></label>
+                <input asp-for="Date" class="form-control" />
+                <span asp-validation-for="Date" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Quantity" class="control-label"></label>
+                <input asp-for="Quantity" class="form-control" />
+                <span asp-validation-for="Quantity" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="VATRate" class="control-label"></label>
+                <input asp-for="VATRate" class="form-control" />
+                <span asp-validation-for="VATRate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Price" class="control-label"></label>
+                <input asp-for="Price" class="form-control" />
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AmountExclTax" class="control-label"></label>
+                <input asp-for="AmountExclTax" class="form-control" />
+                <span asp-validation-for="AmountExclTax" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AmountInclTax" class="control-label"></label>
+                <input asp-for="AmountInclTax" class="form-control" />
+                <span asp-validation-for="AmountInclTax" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TotalPrice" class="control-label"></label>
+                <input asp-for="TotalPrice" class="form-control" />
+                <span asp-validation-for="TotalPrice" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>

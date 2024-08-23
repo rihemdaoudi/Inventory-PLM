@@ -1,0 +1,68 @@
+﻿@model Inventory_PLM.Models.PurchaseOrder
+
+@{
+    ViewData["Title"] = "Create Purchase Order";
+    Layout = "~/Views/Shared/_StoreLayout.cshtml";
+}
+
+<h1 class="h3 mb-4 text-gray-800">@ViewData["Title"]</h1>
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Create Purchase Order</h6>
+    </div>
+    <div class="card-body">
+        <form asp-action="CreatePurchaseOrder" method="post">
+            <div class="form-group">
+                <label asp-for="Code">Purchase Order Code</label>
+                <input asp-for="Code" class="form-control" />
+                <span asp-validation-for="Code" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Designation">Designation</label>
+                <input asp-for="Designation" class="form-control" />
+                <span asp-validation-for="Designation" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="PurchaseDate">Purchase Date</label>
+                <input asp-for="PurchaseDate" type="date" class="form-control" />
+                <span asp-validation-for="PurchaseDate" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="CommissioningDate">Commissioning Date</label>
+                <input asp-for="CommissioningDate" type="date" class="form-control" />
+                <span asp-validation-for="CommissioningDate" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="SupplierID">Supplier</label>
+                <select asp-for="SupplierID" class="form-control" asp-items="@ViewBag.Suppliers"></select>
+                <span asp-validation-for="SupplierID" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="StoreLocation">Store Location</label>
+                <input asp-for="StoreLocation" class="form-control" />
+                <span asp-validation-for="StoreLocation" class="text-danger"></span>
+            </div>
+
+            @* <div class="form-group">
+                <label asp-for="QuantityInStock">Quantity In Stock</label>
+                <input asp-for="QuantityInStock" type="number" class="form-control" />
+                <span asp-validation-for="QuantityInStock" class="text-danger"></span>
+            </div> *@
+
+            <div class="form-group">
+                <label asp-for="AlertQuantity">Alert Quantity</label>
+                <input asp-for="AlertQuantity" type="number" class="form-control" />
+                <span asp-validation-for="AlertQuantity" class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Create</button>
+            <a asp-action="PurchaseOrderManagement" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+</div>

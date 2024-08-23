@@ -1,0 +1,95 @@
+﻿@model Inventory_PLM.Models.ViewModels.ReportsViewModel
+
+@{
+    ViewData["Title"] = "Reports";
+    //Layout = "~/Views/Shared/_PurchaseLayout.cshtml";
+
+}
+
+<div class="container-fluid">
+    <h1 class="h3 mb-4 text-gray-800">Reports</h1>
+
+    <div class="row">
+        <!-- Trends Chart -->
+        <div class="col-lg-6 mb-4">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Purchasing Trends</h6>
+                </div>
+                <div class="card-body">
+                    <canvas id="trendsChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Inventory Levels Chart -->
+        <div class="col-lg-6 mb-4">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Inventory Levels</h6>
+                </div>
+                <div class="card-body">
+                    <canvas id="inventoryLevelsChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Data for Purchasing Trends
+            var trendsData = @Html.Raw(Json.Serialize(Model.TrendsData));
+
+            // Create the Trends Chart
+            var ctxTrends = document.getElementById('trendsChart').getContext('2d');
+            var trendsChart = new Chart(ctxTrends, {
+                type: 'line',
+                data: {
+                    labels: trendsData.labels,
+                    datasets: [{
+                        label: 'Purchasing Trends',
+                        data: trendsData.values,
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
+            // Data for Inventory Levels
+            var inventoryLevelsData = @Html.Raw(Json.Serialize(Model.InventoryLevelsData));
+
+            // Create the Inventory Levels Chart
+            var ctxInventoryLevels = document.getElementById('inventoryLevelsChart').getContext('2d');
+            var inventoryLevelsChart = new Chart(ctxInventoryLevels, {
+                type: 'bar',
+                data: {
+                    labels: inventoryLevelsData.labels,
+                    datasets: [{
+                        label: 'Inventory Levels',
+                        data: inventoryLevelsData.values,
+                        backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                        borderColor: 'rgba(153, 102, 255, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+}

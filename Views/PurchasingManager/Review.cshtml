@@ -1,0 +1,36 @@
+﻿@model Inventory_PLM.Models.ViewModels.ProposalReviewViewModel
+
+@{
+    ViewData["Title"] = "Review Purchase Proposal";
+    Layout = "~/Views/Shared/_PurchaseLayout.cshtml";
+}
+
+<h1>Review Purchase Proposal</h1>
+
+<div>
+    <h4>@Model.Description</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">Amount</dt>
+        <dd class="col-sm-10">@Model.Amount</dd>
+        <dt class="col-sm-2">Submitted Date</dt>
+        <dd class="col-sm-10">@Model.SubmittedDate</dd>
+        <dt class="col-sm-2">Submitted By</dt>
+        <dd class="col-sm-10">@Model.SubmittedBy</dd>
+    </dl>
+</div>
+
+<form asp-action="Review" method="post">
+    <input type="hidden" asp-for="ProposalId" />
+    <div class="form-group">
+        <label asp-for="Comments" class="control-label"></label>
+        <textarea asp-for="Comments" class="form-control"></textarea>
+    </div>
+    <div class="form-group">
+        <label asp-for="Approved" class="control-label"></label>
+        <input asp-for="Approved" class="form-control" type="checkbox" />
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Submit" class="btn btn-primary" />
+    </div>
+</form>

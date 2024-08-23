@@ -1,0 +1,246 @@
+﻿@model IEnumerable<Inventory_PLM.Models.Product>
+
+@{
+    ViewData["Title"] = "Product List";
+    Layout = "~/Views/Shared/_StoreLayout.cshtml";
+}
+
+<div class="container-fluid">
+    <h1 class="h3 mb-4 text-gray-800">Product Management</h1>
+
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <!-- Add User Button -->
+             <button class="btn btn-success btn-sm" data-toggle="modal" data-target="#addProductModal">
+                <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                Add Product
+            </button> 
+        </div>
+
+        @* <p>
+        <a asp-action="Create" class="btn btn-primary">Create New</a>
+        </p> *@
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Category</th>
+                            <th>Price</th>
+                            <th>Quantity</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.Name</td>
+                                <td>@item.Category.Name</td>
+                                <td>@item.Price</td>
+                                <td>@item.Quantity</td>
+                                <td>
+                                   @*  <!-- Edit Button -->
+                                    <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#editProductModal-@item.ID">
+                                        Edit
+                                    </button>
+                                    <!-- Delete Button -->
+                                    <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteProductModal-@item.ID">
+                                        Delete
+                                    </button> *@
+                                    @* <a asp-action="Edit" asp-route-id="@item.ID" class="btn btn-warning">Edit</a>
+                                    <a asp-action="Delete" asp-route-id="@item.ID" class="btn btn-danger">Delete</a> *@
+                                    <!-- Edit Icon -->
+                                     <a href="javascript:void(0);" data-toggle="modal" data-target="#editProductModal" data-id="@item.ID" class="editProduct">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <!-- Delete Icon -->
+                                    <a href="javascript:void(0);" data-toggle="modal" data-target="#deleteProductModal" data-id="@item.ID" class="deleteProduct">
+                                        <i class="fas fa-trash"></i>
+                                    </a> 
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+ <!-- Add Product Modal -->
+<div class="modal fade" id="addProductModal" tabindex="-1" role="dialog" aria-labelledby="addProductModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form asp-action="Create" method="post">
+              <div class="modal-header">
+                <h5 class="modal-title" id="addProductModalLabel">Add Product</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <!-- Form for Adding Product -->
+                @Html.Partial("_ProductFormPartial", new Inventory_PLM.Models.Product())
+              </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<!-- Edit  Product -->
+
+    <div class="modal fade" id="editProductModal" tabindex="-1" role="dialog" aria-labelledby="editProductModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form asp-action="Edit" method="post">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editProductModalLabel">Edit Product</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Form for Editing Product -->
+                    @Html.Partial("_ProductFormPartial", new Inventory_PLM.Models.Product())
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+    
+ 
+
+<!-- Delete Product Modal -->
+<div class="modal fade" id="deleteProductModal" tabindex="-1" role="dialog" aria-labelledby="deleteProductModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form asp-action="Delete" method="post">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteProductModalLabel">Delete Product</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete this product?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script src="~/assets/vendor/datatables/jquery.datatables.min.js"></script>
+    <script src="~/assets/vendor/datatables/datatables.bootstrap4.min.css"></script>
+    <script>
+        $(document).ready(function () {
+            $('#dataTable').DataTable();
+
+            $('.editProduct').click(function () {
+                var productId = $(this).data('id');
+                $.ajax({
+                    url: '/StoreManager/GetEditFormData',
+                    type: 'GET',
+                    data: { id: productId },
+                    success: function (data) {
+                        $('#editProductForm').attr('action', '/StoreManager/Edit/' + productId);
+                        $('#editProductForm input[name="ID"]').val(data.product.id);
+                        $('#editProductForm input[name="Name"]').val(data.product.name);
+                        $('#editProductForm input[name="Code"]').val(data.product.code);
+                        $('#editProductForm input[name="Description"]').val(data.product.description);
+                        $('#editProductForm input[name="Price"]').val(data.product.price);
+                        $('#editProductForm input[name="Quantity"]').val(data.product.quantity);
+
+                        var categorySelect = $('#editProductForm select[name="CategoryID"]');
+                        categorySelect.empty();
+                        $.each(data.categories, function (i, category) {
+                            categorySelect.append($('<option>', {
+                                value: category.id,
+                                text: category.name,
+                                selected: category.id == data.product.categoryID
+                            }));
+                        });
+
+                        var subCategorySelect = $('#editProductForm select[name="SubCategoryID"]');
+                        subCategorySelect.empty();
+                        $.each(data.subCategories, function (i, subCategory) {
+                            subCategorySelect.append($('<option>', {
+                                value: subCategory.id,
+                                text: subCategory.name,
+                                selected: subCategory.id == data.product.subCategoryID
+                            }));
+                        });
+
+                        var unitOfMeasureSelect = $('#editProductForm select[name="UnitOfMeasureID"]');
+                        unitOfMeasureSelect.empty();
+                        $.each(data.unitsOfMeasure, function (i, unit) {
+                            unitOfMeasureSelect.append($('<option>', {
+                                value: unit.id,
+                                text: unit.name,
+                                selected: unit.id == data.product.unitOfMeasureID
+                            }));
+                        });
+                    }
+                });
+            });
+
+            $('.deleteProduct').click(function () {
+                var productId = $(this).data('id');
+                $('#deleteProductModal form').attr('action', '/StoreManager/Delete/' + productId);
+            });
+        });
+
+        // $(document).ready(function () {
+        //     $('#dataTable').DataTable();
+
+        //     $('.editProduct').click(function () {
+        //         var productId = $(this).data('id');
+        //         $.ajax({
+        //             url: '/StoreManager/GetProduct',
+        //             type: 'GET',
+        //             data: { id: productId },
+        //             success: function (data) {
+        //                 $('#editProductForm').attr('action', '/StoreManager/Edit/' + productId);
+        //                 $('#editProductForm input[name="ID"]').val(data.ID);
+        //                 $('#editProductForm input[name="Name"]').val(data.Name);
+        //                 $('#editProductForm select[name="CategoryID"]').val(data.CategoryID);
+        //                 $('#editProductForm select[name="SubCategoryID"]').val(data.SubCategoryID);
+        //                 $('#editProductForm select[name="UnitOfMeasureID"]').val(data.UnitOfMeasureID);
+        //                 $('#editProductForm input[name="Code"]').val(data.Code);
+        //                 $('#editProductForm input[name="Description"]').val(data.Description);
+        //                 $('#editProductForm input[name="Price"]').val(data.Price);
+        //                 $('#editProductForm input[name="Quantity"]').val(data.Quantity);
+        //             }
+        //         });
+        //     });
+        //         // Show the edit modal
+        //        // $('#editProductModal').modal('show');
+        //     // Pass data to Delete modal
+        //     $('.deleteProduct').click(function () {
+        //         var productId = $(this).data('id');
+                
+        //         // Set the action URL for the delete form
+        //         $('#deleteProductModal form').attr('action', '/StoreManager/Delete/' + productId);
+
+        //         // Show the delete confirmation modal
+        //         $('#deleteProductModal').modal('show');
+        //     });
+        // });
+    </script>
+}

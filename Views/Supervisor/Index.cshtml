@@ -1,0 +1,137 @@
+﻿@model IEnumerable<Inventory_PLM.Models.SalesOrder>
+
+@{
+    ViewData["Title"] = "Order to be validated";
+    Layout = "~/Views/Shared/_SupervisorLayout.cshtml";
+}
+
+<div class="container-fluid">
+    <h1 class="h3 mb-4 text-gray-800">Order to be validated</h1>
+    
+    <!-- Affichage des erreurs -->
+    @if (!ViewData.ModelState.IsValid)
+    {
+        <div class="alert alert-danger">
+            @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+            {
+                <p>@error.ErrorMessage</p>
+            }
+        </div>
+    }
+    <div class="card shadow mb-4">
+        <div class="card-body">
+
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+
+                    <thead>
+                        <tr>
+                            <th>Code</th>
+                            <th>Customer</th>
+                            <th>Sale date</th>
+                            <th>Total amount</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.Code</td>
+                                <td>@item.Customer.FirstName</td>
+                                <td>@item.SaleDate.ToString("dd/MM/yyyy")</td>
+                                <td>@item.TotalAmount.ToString("C")</td>
+                                <td>@item.Status.ToString()</td>
+                                <td>
+                                    <!-- Approve Button -->
+                                    <button class="btn btn-success btn-sm" data-toggle="modal" data-target="#approveModal" data-id="@item.ID" data-code="@item.Code">Approve</button>
+
+                                    <!-- Reject Button -->
+                                    <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#rejectModal" data-id="@item.ID" data-code="@item.Code">Reject</button>
+                                </td>
+                                @* <td>
+                                    <a href="@Url.Action("Approve", "Supervisor", new { id = item.ID })" class="btn btn-success btn-sm">Approve</a>
+                                    <a href="@Url.Action("Reject", "Supervisor", new { id = item.ID })" class="btn btn-danger btn-sm">Reject</a>
+                                </td> *@
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Approve Modal -->
+<div class="modal fade" id="approveModal" tabindex="-1" role="dialog" aria-labelledby="approveModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="approveModalLabel">Approve Order</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to approve the order <strong id="approveOrderCode"></strong>?
+            </div>
+            <div class="modal-footer">
+                <form id="approveForm" method="post">
+                    <input type="hidden" name="id" id="approveOrderId" />
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-success">Approve</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Reject Modal -->
+<div class="modal fade" id="rejectModal" tabindex="-1" role="dialog" aria-labelledby="rejectModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="rejectModalLabel">Reject Order</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to reject the order <strong id="rejectOrderCode"></strong>?
+            </div>
+            <div class="modal-footer">
+                <form id="rejectForm" method="post">
+                    <input type="hidden" name="id" id="rejectOrderId" />
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-danger">Reject</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#approveModal').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget);
+                var orderId = button.data('id');
+                var orderCode = button.data('code');
+                var modal = $(this);
+                modal.find('#approveOrderId').val(orderId);
+                modal.find('#approveOrderCode').text(orderCode);
+                modal.find('#approveForm').attr('action', '/Supervisor/Approve/' + orderId);
+            });
+
+            $('#rejectModal').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget);
+                var orderId = button.data('id');
+                var orderCode = button.data('code');
+                var modal = $(this);
+                modal.find('#rejectOrderId').val(orderId);
+                modal.find('#rejectOrderCode').text(orderCode);
+                modal.find('#rejectForm').attr('action', '/Supervisor/Reject/' + orderId);
+            });
+        });
+    </script>
+}

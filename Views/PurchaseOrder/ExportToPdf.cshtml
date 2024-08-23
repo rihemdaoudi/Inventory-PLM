@@ -1,0 +1,65 @@
+﻿@model IEnumerable<Inventory_PLM.Models.PurchaseOrder>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Purchase Orders</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Purchase Orders</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Code</th>
+                <th>Designation</th>
+                <th>Purchase Date</th>
+                <th>Commissioning Date</th>
+                <th>Supplier</th>
+                <th>Store Location</th>
+                @* <th>Quantity in Stock</th> *@
+                <th>Alert Quantity</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var order in Model)
+            {
+                <tr>
+                    <td>@order.Code</td>
+                    <td>@order.Designation</td>
+                    <td>@order.PurchaseDate.ToString("yyyy-MM-dd")</td>
+                    <td>@order.CommissioningDate?.ToString("yyyy-MM-dd")</td>
+                    <td>@order.Supplier.FirstName</td>
+                    <td>@order.StoreLocation</td>
+                   @*  <td>@order.QuantityInStock</td> *@
+                    <td>@order.AlertQuantity</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</body>
+</html>
